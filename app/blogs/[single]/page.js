@@ -1,26 +1,36 @@
 import config from "@config/config.json";
 import PostSingle from "@layouts/PostSingle";
 import { getSinglePage } from "@lib/contentParser";
+
 const { blog_folder } = config.settings;
 
-// post single layout
 const Article = async ({ params }) => {
-  const { single } = params;
-  const posts = await getSinglePage(`content/${blog_folder}`);
-  const post = posts.filter((p) => p.slug == single);
-  const { frontmatter, content } = post[0];
+  const posts = getSinglePage(`content/${blog_folder}`);
 
-  return <PostSingle frontmatter={frontmatter} content={content} />;
+  const post = posts.find(
+    (p) => p.slug === params.single
+  );
+
+  if (!post) {
+    return <div>Post not found</div>;
+  }
+
+  const { frontmatter, content } = post;
+
+  return (
+    <PostSingle
+      frontmatter={frontmatter}
+      content={content}
+    />
+  );
 };
 
-// get post single slug
-export const generateStaticParams = () => {
-  const allSlug = getSinglePage(`content/${blog_folder}`);
-  const paths = allSlug.map((item) => ({
-    single: item.slug,
+export async function generateStaticParams() {
+  const posts = getSinglePage(`content/${blog_folder}`);
+
+  return posts.map((post) => ({
+    single: post.slug,
   }));
-
-  return paths;
-};
+}
 
 export default Article;
