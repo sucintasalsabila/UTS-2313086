@@ -2,9 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Autoplay, Pagination } from "swiper";
+
+import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper.min.css";
+
+import "swiper/css";
+import "swiper/css/pagination";
 
 const Services = ({ services }) => {
   return services.map((service, index) => {
